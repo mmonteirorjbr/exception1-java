@@ -10,7 +10,8 @@ import modelo.entidades.Reserva;
 public class programa {
 
 	 public static void main(String[] arqs) throws ParseException  {
-		 
+		 // Essa e a solucao muito ruim porque o tratamento das datas tinha de estar dentro da reserva
+		 // ou seja, o tratamento esta no programa principal e nao no modulo
 		 Scanner sc= new Scanner(System.in);
 				 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 		  
@@ -20,6 +21,9 @@ public class programa {
 		         Date checkIn = sdf.parse(sc.next());
 		         System.out.print("Data do Check-out (dd/MM/yyyy):");
 		         Date checkOut = sdf.parse(sc.next());
+		         
+		         // essa validacao deveria ser tirada daqui tambem, mas ela deveira ir para o contrutor
+		         // so que ele nao pode retornar nada entao nao da pra fazer ainda
 		         
 		         if (!checkOut.after(checkIn)) {
 		        	 System.out.println("Erro na reserva: Data do Check-out tem de ser depois da data do Check-in");
@@ -35,21 +39,15 @@ public class programa {
 			         checkIn = sdf.parse(sc.next());
 			         System.out.print("Data do Check-out (dd/MM/yyyy):");
 			         checkOut = sdf.parse(sc.next());
-			         
-			         //solucao muito  ruim para tratamento de datas passadas
-			         
-			         Date agora = new Date();
-			         //Ses datas foram antes de agora nao aceita
-			         if (checkIn.before(agora) || checkOut.before(agora) ) {
-			        	 System.out.println("erro na reserva: Datas para Atualizar tem de ser datas futuras ");
+			     
+			       	         
+			         String erro =   reserva.AtualizaDatas(checkIn, checkOut);
+			         if (erro != null ) {
+			        	 System.out.println("Erro na Reserva: " + erro);					       
 			         }
-			         else if (!checkOut.after(checkIn)) {
-			        	 System.out.println("Erro na reserva: Data do Check-out tem de ser depois da data do Check-in");
-			         }
-			         else { 	         
-			        reserva.AtualizaDatas(checkIn, checkOut);
+			         else {
 			         System.out.println("Reserva:" + reserva);
-			         } 
+			         }
 		         }
 		         sc.close();
 		         

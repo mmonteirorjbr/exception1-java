@@ -51,10 +51,29 @@ public class Reserva {
 	
 	}
 	
-	public void AtualizaDatas(Date checkIn, Date checkOut) {
+	public String AtualizaDatas(Date checkIn, Date checkOut) {
+	    
+        //solucao ruim com o tratamento dentro do codigo e nao no programa principal 
+        
+        Date agora = new Date();
+        //Se as datas foram antes de agora nao aceita
+        
+        //a mudanca e que ao inves de printar ele retorna o erro. E a seguir ao invés de ter o "else" 
+        // ja q ele retorna e para a funcao nao precisa de else , so de outro if
+        
+        if (checkIn.before(agora) || checkOut.before(agora) ) {
+       	   return "Datas para Atualizar têm de ser datas futuras ";
+        }
+        
+       	if (!checkOut.after(checkIn)) {
+       	  return "Data do Check-out tem de ser depois da data do Check-in";
+        }
 		this.checkIn = checkIn; 
 		this.checkOut = checkOut;
 		
+		//deveria retornar uma string mas como nao deu erro o criterio pra indicar q esta tudo certo 
+		// e retornar nulo
+		return null;
 	}
 	 
 	@Override
