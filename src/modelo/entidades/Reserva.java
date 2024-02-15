@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
+import modelo.excecoes.DomainException;
+
 public class Reserva {
 
 	 private Integer numQuarto;
@@ -16,7 +18,14 @@ public class Reserva {
 	 
 	 private static SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
-	public Reserva(Integer numQuarto, Date checkIn, Date checkOut) {
+	public Reserva(Integer numQuarto, Date checkIn, Date checkOut)  {
+		// ele informa que o tratamento tem de vir logo no comeco do construtor
+		// antes de usar as variaveis
+	  	if (!checkOut.after(checkIn)) {
+     	   throw new DomainException("Data do Check-out tem de ser depois da data do Check-in");
+    	}
+    	
+	
 		this.numQuarto = numQuarto;
 		this.checkIn = checkIn;
 		this.checkOut = checkOut;
@@ -51,7 +60,10 @@ public class Reserva {
 	
 	}
 	
-	public String AtualizaDatas(Date checkIn, Date checkOut) {
+	// Aqui o metodo  ao inves de retornar mensagem ele vai virar void de novo
+	// e entao trata as excecoes ja com a tabela de erros previstos no java
+	
+	public void AtualizaDatas(Date checkIn, Date checkOut)  {
 	    
         //solucao ruim com o tratamento dentro do codigo e nao no programa principal 
         
@@ -62,18 +74,18 @@ public class Reserva {
         // ja q ele retorna e para a funcao nao precisa de else , so de outro if
         
         if (checkIn.before(agora) || checkOut.before(agora) ) {
-       	   return "Datas para Atualizar têm de ser datas futuras ";
+        	// Ao inves do IllegalArgumentException chama o tratamento de excecoes 
+       	   throw new DomainException("Datas para Atualizar têm de ser datas futuras ");
         }
         
        	if (!checkOut.after(checkIn)) {
-       	  return "Data do Check-out tem de ser depois da data do Check-in";
-        }
+        	   throw new DomainException("Data do Check-out tem de ser depois da data do Check-in");
+       	}
+       	
 		this.checkIn = checkIn; 
 		this.checkOut = checkOut;
 		
-		//deveria retornar uma string mas como nao deu erro o criterio pra indicar q esta tudo certo 
-		// e retornar nulo
-		return null;
+
 	}
 	 
 	@Override
